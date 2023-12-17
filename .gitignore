@@ -1,0 +1,7 @@
+/img/out/
+.idea/
+out/
+
+*.png
+*.zip
+*.iml
