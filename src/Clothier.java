@@ -170,7 +170,6 @@ public class Clothier
     
     private void recolor(int fromVertical, int toVertical, int fromHorizontal, int toHorizontal, Function<Integer, Integer> recolorFactorFunction)
     {
-        
         IntStream.range(fromHorizontal, toHorizontal).parallel().forEach(j ->
         {
             for(int i = fromVertical; i < toVertical; i++)
@@ -207,7 +206,6 @@ public class Clothier
     {
         return color >= darkestBackground;
     }
-    
     
     private record IntTuple(int x, int y) {}
     
