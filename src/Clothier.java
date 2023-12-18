@@ -33,8 +33,8 @@ public class Clothier
         crotchTop = (find_crotch_top() - 6);
         int chestHeight = (int) ((crotchTop - neck) * 1.1);
         
-        recolor(halfWidth - chestHeight, halfWidth + chestHeight, neck, crotchTop, this::darker);
-        recolor(halfWidth - chestHeight, halfWidth + chestHeight, crotchTop, image.getHeight(), this::brighter);
+        recolor(halfWidth - chestHeight, halfWidth + chestHeight, neck, crotchTop, RecolorFunction.DARKER1.func);
+        recolor(halfWidth - chestHeight, halfWidth + chestHeight, crotchTop, image.getHeight(), RecolorFunction.LIGHTER1.func);
         
         ImageIO.write(image, "png", new File(outPath));
     }
@@ -226,6 +226,10 @@ public class Clothier
         {
             this.func = func;
         }
+        
+        public Function<Integer, Integer> getFunc() {
+            return func;
+        }
     }
     
     private int lighter2(int c, int factor)
@@ -238,7 +242,6 @@ public class Clothier
         return c / (factor + 1); // Math.floor((c + 0 * factor) / (factor + 1))
     }
     
-    // TODO pls hübscher
     private Integer brighter(int x)
     {
         return transformColor(x, (-0.00354978 * x + 1.8589604));
