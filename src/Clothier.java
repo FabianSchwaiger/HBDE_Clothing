@@ -213,12 +213,10 @@ public class Clothier
     {
         LIGHT(x -> transformColor(x, (-0.00354978 * x + 1.8589604))),
         DARK(x -> transformColor(x, (255.0 / x))),
-        LIGHTER1(x -> (int)Math.ceil((x + 255D) * 0.5)),
-        LIGHTER2(x -> (int)Math.ceil((x + 255D * 2) / 3D)),
-        LIGHTER3(x -> (int)Math.ceil((x + 255D * 3) * 0.25D)),
-        DARKER1(x -> x / 2),
-        DARKER2(x -> x / 3),
-        DARKER3(x -> x / 4);
+        LIGHTER1(x -> lighter2(x, 2)),
+        LIGHTER(x -> lighter3(x, 2, 3)),
+        DARKER1(x -> darker2(x, 2)),
+        DARKER(x -> darker3(x, 2, 3));
         
         private final Function<Integer, Integer> func;
         
@@ -232,14 +230,24 @@ public class Clothier
         }
     }
     
-    private int lighter2(int c, int factor)
+    private static int lighter3(int c, int baseFactor, int lightFactor)
     {
-        return (int)Math.ceil((c + 255 * factor) / (factor + 1D)); // Math.floor(c + factor * 0) / (factor + 1)
+        return (int)Math.ceil((c * baseFactor + 255D * lightFactor) / (baseFactor + lightFactor));
     }
     
-    private int darker2(int c, int factor)
+    private static int lighter2(int c, int factor)
     {
-        return c / (factor + 1); // Math.floor((c + 0 * factor) / (factor + 1))
+        return lighter3(c, 1, factor);
+    }
+    
+    private static int darker3(int c, int baseFactor, int darkFactor)
+    {
+        return (int)Math.ceil((c * baseFactor + 0D * darkFactor) / (baseFactor + darkFactor));
+    }
+    
+    private static int darker2(int c, int factor)
+    {
+        return darker3(c, 1, factor);
     }
     
     private Integer brighter(int x)
