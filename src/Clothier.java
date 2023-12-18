@@ -212,7 +212,13 @@ public class Clothier
     public enum RecolorFunction
     {
         LIGHT(x -> transformColor(x, (-0.00354978 * x + 1.8589604))),
-        DARK(x -> transformColor(x, (255.0 / x)));
+        DARK(x -> transformColor(x, (255.0 / x))),
+        LIGHTER1(x -> (int)Math.ceil((x + 255D) * 0.5)),
+        LIGHTER2(x -> (int)Math.ceil((x + 255D * 2) / 3D)),
+        LIGHTER3(x -> (int)Math.ceil((x + 255D * 3) * 0.25D)),
+        DARKER1(x -> x / 2),
+        DARKER2(x -> x / 3),
+        DARKER3(x -> x / 4);
         
         private final Function<Integer, Integer> func;
         
@@ -220,6 +226,16 @@ public class Clothier
         {
             this.func = func;
         }
+    }
+    
+    private int lighter2(int c, int factor)
+    {
+        return (int)Math.ceil((c + 255 * factor) / (factor + 1D)); // Math.floor(c + factor * 0) / (factor + 1)
+    }
+    
+    private int darker2(int c, int factor)
+    {
+        return c / (factor + 1); // Math.floor((c + 0 * factor) / (factor + 1))
     }
     
     // TODO pls hübscher
