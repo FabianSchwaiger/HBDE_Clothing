@@ -33,8 +33,8 @@ public class Clothier
         crotchTop = (find_crotch_top() - 6);
         int chestHeight = (int) ((crotchTop - neck) * 1.1);
         
-        recolor(halfWidth - chestHeight, halfWidth + chestHeight, neck, crotchTop, RecolorFunction.DARKER1.func);
-        recolor(halfWidth - chestHeight, halfWidth + chestHeight, crotchTop, image.getHeight(), RecolorFunction.LIGHTER1.func);
+        recolor(halfWidth - chestHeight, halfWidth + chestHeight, neck, crotchTop, RecolorFunction.DARKER.func);
+        recolor(halfWidth - chestHeight, halfWidth + chestHeight, crotchTop, image.getHeight(), RecolorFunction.DARKER.func);
         
         ImageIO.write(image, "png", new File(outPath));
     }
@@ -59,7 +59,7 @@ public class Clothier
         while(start < image.getHeight())
         {
             int to = Math.min(random.nextInt(minThickness, maxThickness) + start, image.getHeight());
-            recolor(halfWidth - chestHeight, halfWidth + chestHeight, start, to, flag ? this::darker : this::brighter);
+            recolor(halfWidth - chestHeight, halfWidth + chestHeight, start, to, flag ? RecolorFunction.DARKER.func : RecolorFunction.LIGHTER.func);
             flag = !flag;
             start = to + 1;
         }
@@ -211,22 +211,14 @@ public class Clothier
     
     public enum RecolorFunction
     {
-        LIGHT(x -> transformColor(x, (-0.00354978 * x + 1.8589604))),
-        DARK(x -> transformColor(x, (255.0 / x))),
-        LIGHTER1(x -> lighter2(x, 2)),
         LIGHTER(x -> lighter3(x, 2, 3)),
-        DARKER1(x -> darker2(x, 2)),
-        DARKER(x -> darker3(x, 2, 3));
+        DARKER(x -> darker3(x, 4,2));
         
         private final Function<Integer, Integer> func;
         
         RecolorFunction(Function<Integer, Integer> func)
         {
             this.func = func;
-        }
-        
-        public Function<Integer, Integer> getFunc() {
-            return func;
         }
     }
     
@@ -235,29 +227,8 @@ public class Clothier
         return (int)Math.ceil((c * baseFactor + 255D * lightFactor) / (baseFactor + lightFactor));
     }
     
-    private static int lighter2(int c, int factor)
-    {
-        return lighter3(c, 1, factor);
-    }
-    
     private static int darker3(int c, int baseFactor, int darkFactor)
     {
         return (int)Math.ceil((c * baseFactor + 0D * darkFactor) / (baseFactor + darkFactor));
     }
-    
-    private static int darker2(int c, int factor)
-    {
-        return darker3(c, 1, factor);
-    }
-    
-    private Integer brighter(int x)
-    {
-        return transformColor(x, (-0.00354978 * x + 1.8589604));
-    }
-    
-    private Integer darker(int x)
-    {
-        return transformColor(x, (x / 255.0));
-    }
-    
 }
